@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - CloudDocs</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <h1 class="nav-logo">TaskMate</h1>
+        <div class="nav-links" id="navLinks"></div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <h1>My Dashboard</h1>
+
+      <!-- Dashboard Stats -->
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <h3>Total Tasks</h3>
+          <div class="stat-number" id="totalTasks">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Pending Tasks</h3>
+          <div class="stat-number" id="pendingTasks">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Completed Tasks</h3>
+          <div class="stat-number" id="completedTasks">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Upcoming Tasks</h3>
+          <div class="stat-number" id="upcomingTasks">0</div>
+        </div>
+      </div>
+
+      <!-- User tasks Grid -->
+      <div class="user-tasks">
+        <div id="usertasksGrid" class="task-grid"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2024 CloudDocs. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/auth-service.js"></script>
+    <script src="../js/task-service.js"></script>
+    <script src="../js/script.js"></script>
+  </body>
+</html>

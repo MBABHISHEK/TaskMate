@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdf
+  template:
+    metadata:
+      labels:
+        app: pdf
+    spec:
+      containers:
+        - name: pdf
+          image: pdf-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3002
+          env:
+            - name: DB_HOST
+              value: "host.docker.internal"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "abhishek@2003@sql"
+            - name: DB_NAME
+              value: "Taskmate_db"
+            - name: JWT_SECRET
+              value: "your_jwt_secret_key_here"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pdf-service
+spec:
+  selector:
+    app: pdf
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002
+      nodePort: 30083
+  type: NodePort

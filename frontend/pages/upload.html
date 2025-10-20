@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload - CloudDocs</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <h1 class="nav-logo">CloudDocs</h1>
+        <div class="nav-links" id="navLinks"></div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <h1>Upload PDF</h1>
+      <p>Upload and share your PDF documents with the world.</p>
+
+      <div class="upload-form">
+        <form id="uploadForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="pdfFile">Select PDF:</label>
+            <input
+              type="file"
+              id="pdfFile"
+              name="pdf"
+              accept="application/pdf"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="title">Title (optional):</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Enter document title"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description (optional):</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Enter document description"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="tags">Tags (comma-separated, optional):</label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              placeholder="research, report, notes"
+            />
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="isPublic" />
+            <label for="isPublic">Make this PDF public</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Upload PDF</button>
+        </form>
+
+        <div id="uploadStatus" style="margin-top: 1rem"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2024 CloudDocs. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/auth-service.js"></script>
+    <script src="../js/pdf-service.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const statusDiv = document.getElementById("uploadStatus");
+          const submitBtn = this.querySelector('button[type="submit"]');
+
+          if (!authService.isAuthenticated()) {
+            statusDiv.innerHTML =
+              '<p style="color: red;">Please login to upload PDFs</p>';
+            return;
+          }
+
+          const formData = new FormData(this);
+          const isPublic = document.getElementById("isPublic").checked ? 1 : 0;
+          formData.append("isPublic", isPublic);
+          submitBtn.disabled = true;
+          statusDiv.innerHTML = "<p>Uploading...</p>";
+
+          const result = await pdfService.uploadPdf(formData);
+
+          if (result.success) {
+            statusDiv.innerHTML =
+              '<p style="color: green;">PDF uploaded successfully!</p>';
+            this.reset();
+          } else {
+            statusDiv.innerHTML = `<p style="color: red;">Upload failed: ${result.error}</p>`;
+          }
+
+          submitBtn.disabled = false;
+        });
+    </script>
+  </body>
+</html>
