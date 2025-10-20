@@ -1,4 +1,4 @@
-class taskService {
+class TaskService {
   constructor() {
     this.baseURL = "http://localhost:3002/api";
   }
@@ -54,6 +54,7 @@ class taskService {
 
   // ✅ Create new task (frontend matches backend POST /api/tasks)
   async createTask(task) {
+    console.log("Create task response:", task);
     try {
       const res = await fetch(`${this.baseURL}/tasks`, {
         method: "POST",
@@ -65,6 +66,7 @@ class taskService {
       });
 
       const data = await res.json();
+      console.log("Create task response:", data);
       return res.ok
         ? { success: true, task: data.task }
         : { success: false, error: data.message };
@@ -110,4 +112,4 @@ class taskService {
   }
 }
 
-window.taskService = new taskService();
+window.taskService = new TaskService();

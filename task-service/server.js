@@ -46,6 +46,8 @@ const authenticateToken = async (req, res, next) => {
 app.post("/api/tasks", authenticateToken, async (req, res) => {
   const { title, description, status = "Pending", dueDate } = req.body;
   if (!title) return res.status(400).json({ message: "Title is required" });
+  console.log(req.body);
+  console.log(title, description, status, dueDate);
 
   try {
     const [result] = await pool.execute(

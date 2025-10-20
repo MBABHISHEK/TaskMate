@@ -44,6 +44,7 @@ class AuthService {
 
   // Login existing user
   async login(credentials) {
+    console.log(credentials);
     try {
       const response = await fetch(`${this.baseURL}/auth/login`, {
         method: "POST",

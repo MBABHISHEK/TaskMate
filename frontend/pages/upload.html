@@ -49,6 +49,7 @@
 
     <script src="../js/auth-service.js"></script>
     <script src="../js/task-service.js"></script>
+    <script src="../js/script.js"></script>
     <script>
       const form = document.getElementById("taskForm");
       const message = document.getElementById("formMessage");
@@ -59,17 +60,23 @@
         const newTask = {
           title: document.getElementById("taskTitle").value,
           description: document.getElementById("taskDescription").value,
-          due_date: document.getElementById("taskDueDate").value || null,
+          dueDate: document.getElementById("taskDueDate").value || null,
           status: document.getElementById("taskStatus").value,
         };
 
-        const res = await taskService.createTask(newTask);
+        console.log("Creating task:", newTask);
 
-        if (res.success) {
-          message.innerText = "✅ Task created successfully!";
-          form.reset();
-        } else {
-          message.innerText = "❌ " + res.error;
+        try {
+          const res = await taskService.createTask(newTask);
+
+          if (res.success) {
+            message.innerText = "✅ Task created successfully!";
+            form.reset();
+          } else {
+            message.innerText = "❌ " + res.error;
+          }
+        } catch (err) {
+          message.innerText = "❌ " + err.message;
         }
       });
     </script>

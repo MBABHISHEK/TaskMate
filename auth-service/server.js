@@ -87,6 +87,7 @@ app.post("/api/auth/register", async (req, res) => {
 });
 
 app.post("/api/auth/login", async (req, res) => {
+  console.log("Login attempt:", req.body);
   try {
     const { username, password } = req.body;
     if (!username || !password)
