@@ -8,83 +8,73 @@ class taskService {
     return { Authorization: token ? `Bearer ${token}` : "" };
   }
 
-  // Dashboard - current user tasks + stats
-  async getUsertasksWithStats() {
+  // Dashboard - fetch current user's tasks + stats
+  async getUserTasksWithStats() {
     try {
       const res = await fetch(`${this.baseURL}/tasks/my-tasks`, {
         headers: this.getAuthHeaders(),
       });
       const data = await res.json();
-      console.log(data);
       if (!res.ok) return { success: false, error: data.message };
-      console.log(res.ok);
-      const tasks = (data.tasks || []).map((img) => ({
-        ...img,
-        url: img.url.startsWith("http")
-          ? img.url
-          : `http://localhost:3002${img.url.startsWith("/") ? "" : "/"}${
-              img.url
-            }`,
-      }));
 
-      console.log(tasks.url);
+      const tasks = data.tasks || [];
       const total = tasks.length;
-      const publicCount = tasks.filter((i) => i.is_public === 1).length;
-      const privateCount = total - publicCount;
-      const storageUsed = tasks.reduce((acc, i) => acc + i.file_size, 0);
-      console.log(tasks.length);
+      const completedCount = tasks.filter(
+        (t) => t.status === "Completed"
+      ).length;
+      const pendingCount = total - completedCount;
+
       return {
         success: true,
         tasks,
         stats: {
           total,
-          public: publicCount,
-          private: privateCount,
-          storageUsed,
+          completed: completedCount,
+          pending: pendingCount,
         },
       };
-    } catch (err) {
+    } catch {
       return { success: false, error: "Network error" };
     }
   }
 
-  // Gallery - all tasks
-  async getAlltasks() {
+  // Gallery - fetch all users’ tasks
+  async getAllTasks() {
     try {
-      const res = await fetch(`${this.baseURL}/tasks/public`);
+      const res = await fetch(`${this.baseURL}/tasks`, {
+        headers: this.getAuthHeaders(),
+      });
       const data = await res.json();
       if (!res.ok) return { success: false, error: data.message };
-
-      const tasks = data.tasks.map((img) => ({
-        ...img,
-        url: `http://localhost:3002/${img.file_path.replace(/\\/g, "/")}`,
-      }));
-      return { success: true, tasks };
-    } catch (err) {
+      return { success: true, tasks: data.tasks || [] };
+    } catch {
       return { success: false, error: "Network error" };
     }
   }
 
-  async uploadtask(formData) {
-    console.log(formData);
+  // ✅ Create new task (frontend matches backend POST /api/tasks)
+  async createTask(task) {
     try {
-      const res = await fetch(`${this.baseURL}/tasks/upload`, {
+      const res = await fetch(`${this.baseURL}/tasks`, {
         method: "POST",
-        headers: this.getAuthHeaders(),
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+          ...this.getAuthHeaders(),
+        },
+        body: JSON.stringify(task),
       });
 
       const data = await res.json();
-      console.log(res.ok);
       return res.ok
         ? { success: true, task: data.task }
         : { success: false, error: data.message };
-    } catch (err) {
+    } catch {
       return { success: false, error: "Network error" };
     }
   }
 
-  async deletetask(taskId) {
+  // Delete task
+  async deleteTask(taskId) {
     try {
       const res = await fetch(`${this.baseURL}/tasks/${taskId}`, {
         method: "DELETE",
@@ -94,7 +84,27 @@ class taskService {
       return res.ok
         ? { success: true }
         : { success: false, error: data.message };
-    } catch (err) {
+    } catch {
+      return { success: false, error: "Network error" };
+    }
+  }
+
+  // Update status
+  async updateStatus(taskId, status) {
+    try {
+      const res = await fetch(`${this.baseURL}/tasks/${taskId}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...this.getAuthHeaders(),
+        },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      return res.ok
+        ? { success: true }
+        : { success: false, error: data.message };
+    } catch {
       return { success: false, error: "Network error" };
     }
   }
