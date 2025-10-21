@@ -218,7 +218,7 @@ async function loadDashboardTasks() {
       <h3>${task.title}</h3>
       <p>${task.description || ""}</p>
       <p>Status: <strong>${task.status}</strong></p>
-      <p>Due: ${task.dueDate || "N/A"}</p>
+      <p>Due: ${task.due_date || "N/A"}</p>
       <button class="btn btn-danger btn-delete" data-id="${
         task.id
       }">Delete</button>

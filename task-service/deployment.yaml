@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pdf-deployment
+  name: task-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pdf
+      app: task
   template:
     metadata:
       labels:
-        app: pdf
+        app: task
     spec:
       containers:
-        - name: pdf
-          image: pdf-service:latest
+        - name: task
+          image: task-service:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 3002
@@ -33,13 +33,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pdf-service
+  name: task-service
 spec:
   selector:
-    app: pdf
+    app: task
   ports:
     - protocol: TCP
       port: 3002
       targetPort: 3002
-      nodePort: 30083
+      nodePort: 30085
   type: NodePort

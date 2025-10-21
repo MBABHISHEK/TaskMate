@@ -1,7 +1,7 @@
 // Authentication Service Client
 class AuthService {
   constructor() {
-    this.baseURL = "http://localhost:3001/api";
+    this.baseURL = "http://localhost:30081/api";
     this.token = localStorage.getItem("CloudDocsToken") || null;
   }
 
