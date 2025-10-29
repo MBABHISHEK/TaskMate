@@ -1,7 +1,7 @@
 {
   "name": "auth-service",
   "version": "1.0.0",
-  "description": "Authentication microservice for CloudDocs",
+  "description": "Authentication microservice for TaskMate",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

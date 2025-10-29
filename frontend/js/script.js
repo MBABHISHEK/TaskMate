@@ -53,13 +53,13 @@ function updateUI() {
   if (heroButtons) {
     if (currentUser) {
       heroButtons.innerHTML = `
-        <a href="upload.html" class="btn btn-primary">Add Task</a>
-        <a href="dashboard.html" class="btn btn-secondary">My Dashboard</a>
+        <a href="pages/upload.html" class="btn btn-primary">Add Task</a>
+        <a href="pages/dashboard.html" class="btn btn-secondary">My Dashboard</a>
       `;
     } else {
       heroButtons.innerHTML = `
         <a href="#" id="getStartedLink" class="btn btn-primary">Get Started</a>
-        <a href="gallery.html" class="btn btn-secondary">View Repository</a>
+        <a href="pages/gallery.html" class="btn btn-secondary">View Repository</a>
       `;
       const getStartedLink = document.getElementById("getStartedLink");
       if (getStartedLink)
@@ -272,12 +272,13 @@ async function loadGalleryTasks() {
   grid.innerHTML = "";
   res.tasks.forEach((task) => {
     const div = document.createElement("div");
+    console.log("Gallery task:", task);
     div.classList.add("task-card");
     div.innerHTML = `
       <h3>${task.title}</h3>
       <p>${task.description || ""}</p>
       <p>Status: <strong>${task.status}</strong></p>
-      <p>Due: ${task.dueDate || "N/A"}</p>
+      <p>Due: ${task.due_date || "N/A"}</p>
     `;
     grid.appendChild(div);
   });
